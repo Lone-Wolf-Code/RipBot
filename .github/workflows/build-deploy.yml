@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    env:
+      REACT_APP_TWITCH_CLIENT_ID: '${{secrets.REACT_APP_TWITCH_CLIENT_ID}}'
+      REACT_APP_TWITCH_CLIENT_SECRET: '${{secrets.REACT_APP_TWITCH_CLIENT_SECRET}}'
+      GENERATE_SOURCEMAP: false
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    
+    - name: Build
+      run: |
+        echo "The API ID key for this build is: ${{env.REACT_APP_TWITCH_CLIENT_ID}}"
+        echo "The API Secret key for this build is: ${{env.REACT_APP_TWITCH_CLIENT_SECRET}}"
+        npm install
+        npm run build
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: build

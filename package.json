@@ -1,0 +1,52 @@
+{
+  "name": "ripbot",
+  "version": "0.1.0",
+  "author": "Drethek",
+  "homepage": "https://lone-wolf-code.github.io/RipBot/",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^7.0.0-alpha.8",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.10",
+    "node-twitch": "^0.4.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-player": "^2.11.0",
+    "react-router-dom": "^6.4.2",
+    "react-scripts": "5.0.1",
+    "tmi.js": "^1.8.5"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0",
+    "javascript-obfuscator": "^4.0.0",
+    "webpack-obfuscator": "^3.5.1"
+  }
+}
