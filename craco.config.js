@@ -11,7 +11,8 @@ module.exports = {
         plugins: {
             add: [
                 new WebpackObfuscator({
-                    compact: false,
+                    compact: true,
+                    selfDefending: true,                    
                     controlFlowFlattening: true,
                     controlFlowFlatteningThreshold: 1,
                     numbersToExpressions: true,
