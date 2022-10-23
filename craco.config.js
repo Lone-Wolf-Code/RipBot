@@ -13,8 +13,6 @@ module.exports = {
                     compact: true,
                     controlFlowFlattening: true,
                     controlFlowFlatteningThreshold: 1,
-                    deadCodeInjection: true,
-                    deadCodeInjectionThreshold: 1,
                     debugProtection: true,
                     debugProtectionInterval: 4000,
                     disableConsoleOutput: true,
