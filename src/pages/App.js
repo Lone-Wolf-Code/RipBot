@@ -38,23 +38,28 @@ class App extends React.Component {
     this.setState({ channelBanner: user.data[0].offline_image_url })
   }
 
-  async handleNewClip(clipUrl) {
-    const isClip = clipUrl.startsWith("https://clips.twitch.tv/") || clipUrl.startsWith("https://ripvod.com/");
-    if (!isClip) { return }
+  async handleNewClip(message) {
+
     if (!this.state.clipsEnabled) { return }
 
+    const regex = new RegExp('https?:\\/\\/?:www\\.|(?!www)(ripvod\\.com|twitch\\.tv\\/\\S+\\/clip\\/|clips\\.twitch\\.tv\\/)(\\S+)', 'im');
+    var getClip = regex.exec(message);
+
+    if (getClip === null || getClip === undefined ) { return }
+
+    const clipUrl = getClip[0];
     const urlSplit = clipUrl.split("/");
+    const clipHost = urlSplit[0];
     const clipSlug = urlSplit[urlSplit.length - 1].split(".")[0];
-    const clipChannel = urlSplit[3];
 
     if (this.state.queuedClips.some(video => video.slug === clipSlug)) { return }
     if (this.state.watchedClips.some(video => video.slug === clipSlug)) { return }
 
-    if (clipUrl.startsWith("https://clips.twitch.tv/")) {
+    if (clipHost.includes("twitch.tv")) {
       try {
-        let clip = await this.client.API.getClips({ id: clipSlug });
+        const clip = await this.client.API.getClips({ id: clipSlug });
         if (clip.data.length > 0) {
-          let clipObj = { slug: clipSlug, image: clip.data[0].thumbnail_url, video: clip.data[0].thumbnail_url.split("-preview-")[0] + ".mp4" };
+          const clipObj = { slug: clipSlug, image: clip.data[0].thumbnail_url, video: clip.data[0].thumbnail_url.split("-preview-")[0] + ".mp4" };
           if (this.state.queuedClips.length === 0) {
             this.setState({ currentClip: clipObj });
           }
@@ -65,9 +70,9 @@ class App extends React.Component {
       }
     }
 
-    if (clipUrl.startsWith("https://ripvod.com/")) {
+    if (clipHost.includes("ripvod.com")) {
       try {
-        let clipObj = { slug: clipSlug, image: 'https://cfw.ripvod.com/' + clipChannel + '/clip/' + clipSlug + '.jpg', video: 'https://cfw.ripvod.com/' + clipChannel + '/' + clipSlug + '.mp4' };
+        const clipObj = { slug: clipSlug, image: 'https://cfw.ripvod.com/' + urlSplit[1] + '/clip/' + clipSlug + '.jpg', video: 'https://cfw.ripvod.com/' + urlSplit[1] + '/' + clipSlug + '.mp4' };
         if (this.state.queuedClips.length === 0) {
           this.setState({ currentClip: clipObj });
         }
