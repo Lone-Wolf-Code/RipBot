@@ -42,7 +42,7 @@ class App extends React.Component {
 
     if (!this.state.clipsEnabled) { return }
 
-    const regex = new RegExp('https?:\\/\\/?:www\\.|(?!www)(ripvod\\.com|twitch\\.tv\\/\\S+\\/clip\\/|clips\\.twitch\\.tv\\/)(\\S+)', 'im');
+    const regex = new RegExp('https?:\\/\\/?:www\\.|(?!www)(youtube\\.com\\/watch\\?v=|ripvod\\.com|streamable\\.com|twitch\\.tv\\/\\S+\\/clip\\/|clips\\.twitch\\.tv\\/)(\\S+)', 'im');
     var getClip = regex.exec(message);
 
     if (getClip === null || getClip === undefined ) { return }
@@ -73,6 +73,30 @@ class App extends React.Component {
     if (clipHost.includes("ripvod.com")) {
       try {
         const clipObj = { slug: clipSlug, image: 'https://cfw.ripvod.com/' + urlSplit[1] + '/clip/' + clipSlug + '.jpg', video: 'https://cfw.ripvod.com/' + urlSplit[1] + '/' + clipSlug + '.mp4' };
+        if (this.state.queuedClips.length === 0) {
+          this.setState({ currentClip: clipObj });
+        }
+        this.setState({ queuedClips: [...this.state.queuedClips, clipObj] });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (clipHost.includes("streamable.com")) {
+      try {
+        const clipObj = { slug: clipSlug, image: 'https://cdn-cf-east.streamable.com/image/' + clipSlug + '.jpg', video: clipUrl };
+        if (this.state.queuedClips.length === 0) {
+          this.setState({ currentClip: clipObj });
+        }
+        this.setState({ queuedClips: [...this.state.queuedClips, clipObj] });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (clipHost.includes("youtube.com")) {
+      try {
+        const clipObj = { slug: clipSlug.replace('watch?v=', ''), image: 'http://img.youtube.com/vi/' + clipSlug.replace('watch?v=', '') + '/sddefault.jpg', video: clipUrl };
         if (this.state.queuedClips.length === 0) {
           this.setState({ currentClip: clipObj });
         }
